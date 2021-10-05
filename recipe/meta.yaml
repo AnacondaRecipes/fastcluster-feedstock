@@ -34,7 +34,7 @@ test:
 
 about:
   home: http://danifold.net/fastcluster.html
-  license: BSD-2-Clause
+  license: BSD-2-Clause AND GPL-2.0-or-later
   license_file: COPYING.txt
   summary: Fast hierarchical clustering routines for R and Python.
   description: |
@@ -52,4 +52,3 @@ about:
 extra:
   recipe-maintainers:
     - mpharrigan
-    
