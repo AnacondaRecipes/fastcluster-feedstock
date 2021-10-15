@@ -36,7 +36,7 @@ about:
   home: http://danifold.net/fastcluster.html
   license: BSD-2-Clause AND GPL-2.0-or-later
   license_file: COPYING.txt
-  summary: Fast hierarchical clustering routines for R and Python.
+  summary: Fast hierarchical clustering routines for R and Python
   description: |
     This library provides Python functions for hierarchical clustering. It generates hierarchical
     clusters from distance matrices or from vector data.
