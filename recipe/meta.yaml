@@ -1,19 +1,17 @@
 {% set name = "fastcluster" %}
-{% set version = "1.1.26" %}
-{% set sha256 = "a202f44a3b06f5cf9cdba3c67d6c523288922d6e6a1cdf737292f93759aa82f7" %}
+{% set version = "1.2.6" %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  fn: {{ name }}-{{ version }}.tar.gz
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: {{ sha256 }}
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/fastcluster-{{ version }}.tar.gz
+  sha256: aab886efa7b6bba7ac124f4498153d053e5a08b822d2254926b7206cdf5a8aa6
 
 build:
   number: 0
-  script: python setup.py install --single-version-externally-managed --record record.txt
+  script: pip install . --no-deps --no-build-isolation --ignore-installed --no-cache-dir -vv
 
 requirements:
   build:
@@ -21,9 +19,10 @@ requirements:
     - {{ compiler('cxx') }}
   host:
     - python
-    - numpy >=1.9
+    - numpy {{ numpy }}
     - setuptools
     - wheel
+    - pip
   run:
     - python
     - {{ pin_compatible('numpy') }}
@@ -31,10 +30,15 @@ requirements:
 test:
   imports:
     - fastcluster
+  commands:
+    - pip check
+  requires:
+    - pip
 
 about:
-  home: http://danifold.net/fastcluster.html
-  license: BSD-2-Clause AND GPL-2.0-or-later
+  home: https://danifold.net/fastcluster.html
+  license: BSD-2-Clause
+  license_family: BSD
   license_file: COPYING.txt
   summary: Fast hierarchical clustering routines for R and Python
   description: |
@@ -47,7 +51,7 @@ about:
     The interface is very similar to MATLAB’s Statistics Toolbox API to make code easier to
     port from MATLAB to Python/NumPy. The core implementation of this library is in C++ for efficiency.
   dev_url: https://github.com/dmuellner/fastcluster
-  doc_url: https://github.com/dmuellner/fastcluster/raw/master/docs/fastcluster.pdf
+  doc_url: https://cran.r-project.org/web/packages/fastcluster/vignettes/fastcluster.pdf
 
 extra:
   recipe-maintainers:
