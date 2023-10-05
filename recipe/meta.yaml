@@ -38,6 +38,7 @@ test:
 about:
   home: https://danifold.net/fastcluster.html
   license: BSD-2-Clause
+  license_family: BSD
   license_file: COPYING.txt
   summary: Fast hierarchical clustering routines for R and Python
   description: |
