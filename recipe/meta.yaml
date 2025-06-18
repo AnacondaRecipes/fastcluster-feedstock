@@ -1,18 +1,21 @@
 {% set name = "fastcluster" %}
-{% set version = "1.2.6" %}
+{% set version = "1.3.0" %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/fastcluster-{{ version }}.tar.gz
-  sha256: aab886efa7b6bba7ac124f4498153d053e5a08b822d2254926b7206cdf5a8aa6
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  sha256: d5233aeba5c3faa949c7fa6a39345a09f716ccebbd748541e5735c866696df02
 
 build:
   number: 0
   script: pip install . --no-deps --no-build-isolation --ignore-installed --no-cache-dir -vv
   skip: True  # [py<3]
+  ignore_run_exports:
+    - libcxx
+    - numpy
 
 requirements:
   build:
@@ -28,10 +31,6 @@ requirements:
     - python
     - {{ pin_compatible('numpy') }}
 
-# Tests disabled because they still use numpy <2. Passed locally if change run section on numpy <2.
-# ValueError: Unable to avoid copy while creating an array as requested.
-# If using `np.array(obj, copy=False)` replace it with `np.asarray(obj)` to allow a copy when needed (no behavior change in NumPy 1.x).
-
 test:
   source_files:
     - tests
@@ -40,8 +39,17 @@ test:
   commands:
     - pip check
     - python -c "from importlib.metadata import version; assert(version('{{ name }}')=='{{ version }}')"
+    # py39 failed with scipy incompatibility
+    # AssertionError: ('Not the global minimum in step 0: 0.0, 0.5714285714285714')
+    # scipy must be higher that 1.15
+    - pytest -v --ignore=tests/test_vector.py tests  # [py<310]
+    - pytest -v tests  # [py>=310]
   requires:
     - pip
+    - pytest
+    # used latest scipy for py<3.10
+    - scipy  # [py<310]
+    - scipy >=1.15  # [py>=310]
 
 about:
   home: https://danifold.net/fastcluster.html
