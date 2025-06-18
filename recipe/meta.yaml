@@ -13,9 +13,6 @@ build:
   number: 0
   script: pip install . --no-deps --no-build-isolation --ignore-installed --no-cache-dir -vv
   skip: True  # [py<3]
-  ignore_run_exports:
-    - libcxx
-    - numpy
 
 requirements:
   build:
