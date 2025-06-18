@@ -12,6 +12,7 @@ source:
 build:
   number: 0
   script: pip install . --no-deps --no-build-isolation --ignore-installed --no-cache-dir -vv
+  skip: True  # [py<3]
 
 requirements:
   build:
@@ -27,13 +28,22 @@ requirements:
     - python
     - {{ pin_compatible('numpy') }}
 
+# Tests disabled because they still use numpy <2. Passed locally if change run section on numpy <2.
+# ValueError: Unable to avoid copy while creating an array as requested.
+# If using `np.array(obj, copy=False)` replace it with `np.asarray(obj)` to allow a copy when needed (no behavior change in NumPy 1.x).
+
 test:
+  source_files:
+    - tests
   imports:
     - fastcluster
   commands:
     - pip check
+    - python -c "from importlib.metadata import version; assert(version('{{ name }}')=='{{ version }}')"
   requires:
     - pip
+    - pytest
+    - scipy
 
 about:
   home: https://danifold.net/fastcluster.html
