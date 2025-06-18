@@ -42,8 +42,6 @@ test:
     - python -c "from importlib.metadata import version; assert(version('{{ name }}')=='{{ version }}')"
   requires:
     - pip
-    - pytest
-    - scipy
 
 about:
   home: https://danifold.net/fastcluster.html
