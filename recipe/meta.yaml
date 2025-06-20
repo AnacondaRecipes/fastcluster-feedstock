@@ -1,17 +1,19 @@
 {% set name = "fastcluster" %}
-{% set version = "1.2.6" %}
+{% set version = "1.3.0" %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/fastcluster-{{ version }}.tar.gz
-  sha256: aab886efa7b6bba7ac124f4498153d053e5a08b822d2254926b7206cdf5a8aa6
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  sha256: d5233aeba5c3faa949c7fa6a39345a09f716ccebbd748541e5735c866696df02
 
 build:
   number: 0
   script: pip install . --no-deps --no-build-isolation --ignore-installed --no-cache-dir -vv
+  # fastcluster 1.3.0 works best with scipy >=1.15, which is not available for python 3.9
+  skip: True  # [py<310]
 
 requirements:
   build:
@@ -25,15 +27,21 @@ requirements:
     - pip
   run:
     - python
-    - {{ pin_compatible('numpy') }}
+    - numpy
 
 test:
+  source_files:
+    - tests
   imports:
     - fastcluster
   commands:
     - pip check
+    - python -c "from importlib.metadata import version; assert(version('{{ name }}')=='{{ version }}')"
+    - pytest -v tests
   requires:
     - pip
+    - pytest
+    - scipy >=1.15
 
 about:
   home: https://danifold.net/fastcluster.html
